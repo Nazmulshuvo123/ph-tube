@@ -67,12 +67,19 @@ const displayVideos = (videos) => {
       class ="h-full w-full object-cover"
       alt="Shoes" />
     </figure>
-    <div class="card-body">
-       <h2 class="card-title">Shoes!</h2>
-       <p>If a dog chews shoes whose shoes does he choose?</p>
-       <div class="card-actions justify-end">
-        <button class="btn btn-primary">Buy Now</button>
+    <div class="px-0 py-2 flex gap-2">
+       <div>
+         <img class="h-10 w-10 rounded-full object-cover" src=${video.authors[0].profile_picture}/>
        </div>
+       <div>
+         <h2 class="font-bold text-xl">${video.title}</h2>
+         <div class = "flex items-center">
+            <p class= "text-gray-400 font-bold">${video.authors[0].profile_name}</p>
+            <img class="w-7 h-7" src= "https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png"/>
+         </div>
+         <p></p>
+       </div>
+      
     </div>
      `;
     videoContainer.append(card)
