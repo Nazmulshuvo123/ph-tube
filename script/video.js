@@ -8,7 +8,12 @@ function getTimeString(time){
   remainingSecond = remainingSecond % 60;
   return `${year} year ${month} ${hour} hour ${minute} minute ${remainingSecond} second` 
 }
-
+const removeActiveClass = () =>{
+   const buttons = document.getElementsByClassName("category-btn");
+   for(let btn of buttons){
+      btn.classList.remove("active")
+   }
+}
 
 //1 - Fetch, Load and Show Categories on html
 
@@ -23,10 +28,18 @@ const loadCategories = () => {
 };
 
 const loadCategoryVideos = (id) =>{
-  // alert(id);
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((response) => response.json())
-    .then((data) => displayVideos(data.category))
+    .then((data) => {
+      //Remove active class
+      removeActiveClass();
+
+      //Add active class
+      const activeBtn = document.getElementById(`btn-${id}`)
+      console.log(activeBtn);
+      activeBtn.classList.add("active")
+      displayVideos(data.category)
+    })
     .catch((error) => console.log(error))
 }
 //Create loadCategories function
@@ -39,7 +52,7 @@ const displayCategories = (categories) => {
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = 
     `
-      <button onclick="loadCategoryVideos(${elements.category_id})" class="btn">
+      <button id="btn-${elements.category_id}" onclick="loadCategoryVideos(${elements.category_id})" class="btn category-btn">
         ${elements.category}
       </button>
     `
@@ -58,24 +71,6 @@ const loadVideos = () => {
     .then((error) => console.log(error));
 };
 
-// {
-//     "category_id": "1001",
-//     "video_id": "aaad",
-//     "thumbnail": "https://i.ibb.co/f9FBQwz/smells.jpg",
-//     "title": "Smells Like Teen Spirit",
-//     "authors": [
-//         {
-//             "profile_picture": "https://i.ibb.co/k4tkc42/oliviar-harris.jpg",
-//             "profile_name": "Oliver Harris",
-//             "verified": true
-//         }
-//     ],
-//     "others": {
-//         "views": "5.4K",
-//         "posted_date": "1672656000"
-//     },
-//     "description": "'Smells Like Teen Spirit' by Oliver Harris captures the raw energy and rebellious spirit of youth. With over 5.4K views, this track brings a grunge rock vibe, featuring powerful guitar riffs and compelling vocals. Oliver's verified profile guarantees a quality musical journey that resonates with fans of dynamic, high-energy performances."
-// }
 //Create loadVideos function
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("videos");
