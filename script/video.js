@@ -1,10 +1,12 @@
 function getTimeString(time){
   //get hour and rest time
+  const year = parseInt(time / 94608000);
+  const month = parseInt((time % 94608000) / 7884000) + 1;
   const hour = parseInt(time / 3600)
   let remainingSecond = time % 3600;
   const minute = parseInt(remainingSecond / 60);
   remainingSecond = remainingSecond % 60;
-  return `${hour} hour ${minute} minute ${remainingSecond} second` 
+  return `${year} year ${month} ${hour} hour ${minute} minute ${remainingSecond} second` 
 }
 
 
@@ -20,6 +22,13 @@ const loadCategories = () => {
     .catch((error) => console.log(error));
 };
 
+const loadCategoryVideos = (id) =>{
+  // alert(id);
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((response) => response.json())
+    .then((data) => displayVideos(data.category))
+    .catch((error) => console.log(error))
+}
 //Create loadCategories function
 
 const displayCategories = (categories) => {
@@ -27,12 +36,16 @@ const displayCategories = (categories) => {
   categories.forEach((elements) => {
     console.log(elements);
     //create a button for each categories
-    const button = document.createElement("button");
-    button.classList = "btn";
-    button.innerText = elements.category;
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = 
+    `
+      <button onclick="loadCategoryVideos(${elements.category_id})" class="btn">
+        ${elements.category}
+      </button>
+    `
 
     //add button categories
-    categoryContainer.append(button);
+    categoryContainer.append(buttonContainer);
   });
 };
 
@@ -66,6 +79,7 @@ const loadVideos = () => {
 //Create loadVideos function
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("videos");
+  videoContainer.innerHTML = "";
   videos.forEach((video) => {
     console.log(video);
     const card = document.createElement("div");
@@ -77,7 +91,7 @@ const displayVideos = (videos) => {
       class ="h-full w-full object-cover"
       alt="Shoes" />
       ${
-        video.others.posted_date?.length === 0 ? " " : `<span class="absolute right-2 bottom-2 bg-black rounded p-1 text-white">${getTimeString( video.others.posted_date)}</span>`
+        video.others.posted_date?.length === 0 ? " " : `<span class="absolute right-2 bottom-2 text-xs bg-black rounded p-1 text-white">${getTimeString( video.others.posted_date)}</span>`
       }
       
     </figure>
