@@ -83,9 +83,9 @@ const displayDetails = (video) =>{
 }
 
 //Create get video function
-const loadVideos = () => {
+const loadVideos = (searchText = "") => {
   //fetch the data
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then((response) => response.json())
     .then((data) => displayVideos(data.videos))
     .then((error) => console.log(error));
@@ -145,6 +145,9 @@ const displayVideos = (videos) => {
     videoContainer.append(card)
   });
 };
+document.getElementById('search-input').addEventListener('keyup', (event) =>{
+  loadVideos(event.target.value)
+})
 
 loadCategories();
 loadVideos();
